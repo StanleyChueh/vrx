@@ -1,34 +1,78 @@
-# Virtual RobotX (VRX)
-This repository is the home to the source code and software documentation for the VRX simulation environment, which supports simulation of unmanned surface vehicles in marine environments.
-* Designed in coordination with RobotX organizers, this project provides arenas and tasks similar to those featured in past and future RobotX competitions, as well as a description of the WAM-V platform.
-* For RobotX competitors this simulation environment is intended as a first step toward developing tools prototyping solutions in advance of physical on-water testing.
-* We also welcome users with simulation needs beyond RobotX. As we continue to improve the environment, we hope to offer support to a wide range of potential applications.
+# VRX
+This repo is for ROS2 Jazzy user only!!
+And please build from source in your workspace
 
-## A new modernization development: Gazebo Harmonic and ROS 2 Jazzy
+# Installation
 
-> [!NOTE]
-> This development effort was executed by the
-> [Honu Robotics](https://honurobotics.com) team, thanks to the sponsorship
-> of [RoboNation](https://robonation.org/).
+```
+mkdir vrx_ws/
+cd vrx_ws/
+git clone https://github.com/StanleyChueh/vrx.git
+```
 
-We are happy to announce that the repository has been ported to use supported
-versions of Gazebo and ROS 2:
-  * Code is now working with Gazebo Harmonic and ROS 2 Jazzy
-  * This is the recommended configuration for new users.
-  * Users who wish to continue running Gazebo Garden and ROS 2 Humble can still do so using the `humble` branch of this repository.
+Please follow the official instruction for detail:
 
-## The VRX Competition
-The VRX environment is also the "virtual venue" for the [VRX Competition](https://github.com/osrf/vrx/wiki). Please see our Wiki for tutorials and links to registration and documentation relevant to the virtual competition.
+https://github.com/osrf/vrx/wiki/tutorials
 
-[![VRX](images/sydney_regatta_gzsim.png)](https://vimeo.com/851696025 "Gazebo Virtual RobotX v. 2.3 - Click to Watch!")
-![ROS 2 CI](https://github.com/osrf/vrx/workflows/ROS%202%20CI/badge.svg)
+## Basic example
 
-## Getting Started
+This part assume you have built vrx in your workspace
 
- * Watch the [Release 2.3 Highlight Video](https://vimeo.com/851696025).
- * The [VRX Wiki](https://github.com/osrf/vrx/wiki) provides documentation and tutorials.
- * The instructions assume a basic familiarity with the ROS environment and Gazebo.  If these tools are new to you, we recommend starting with the excellent [ROS Tutorials](http://wiki.ros.org/ROS/Tutorials)
- * For technical problems, please use the [project issue tracker](https://github.com/osrf/vrx/issues) to describe your problem or request support.
+### Launch world
+
+```
+cd ~/vrx_ws/
+source /opt/ros/jazzy/setup.bash
+source install/setup.bash
+ros2 launch vrx_gz competition.launch.py world:=sydney_regatta
+```
+
+you will see something like this:
+
+<img width="1585" height="857" alt="image" src="https://github.com/user-attachments/assets/95c7fea1-e06b-4f6c-87e8-17640587dc02" />
+
+### Keyboard control
+
+```
+conda deactivate
+```
+
+```
+cd ~/vrx_ws/src/vrx/keyboard_control/
+python3 boat_keyboard_control.py
+```
+
+## Envrionment setting
+
+### Wind speed
+
+Please locate ~/vrx_ws/src/vrx/vrx_gz/worlds/sydney_regatta.sdf
+
+Please locate this section
+```
+<!-- Load the plugin for the wind --> 
+<plugin
+  filename="libUSVWind.so"
+  name="vrx::USVWind">
+  <wind_obj>
+    <name>wamv</name>
+    <link_name>wamv/base_link</link_name>
+    <coeff_vector>.5 .5 .33</coeff_vector>
+  </wind_obj>
+  <!-- Wind -->
+  <wind_direction>240</wind_direction>
+  <!-- in degrees -->
+  <wind_mean_velocity>5.0</wind_mean_velocity>
+  <var_wind_gain_constants>0</var_wind_gain_constants>
+  <var_wind_time_constants>2</var_wind_time_constants>
+  <random_seed>10</random_seed>
+  <!-- set to zero/empty to randomize -->
+  <update_rate>10</update_rate>
+  <topic_wind_speed>/vrx/debug/wind/speed</topic_wind_speed>
+  <topic_wind_direction>/vrx/debug/wind/direction</topic_wind_direction>
+</plugin>
+```
+
 
 ## Reference
 
@@ -44,22 +88,3 @@ If you use the VRX simulation in your work, please cite our summary publication,
   Month                    = {October}
 }
 ```
-## 🛠️ Getting Help and Contributing
-
-VRX is an open source project supported by the community. If you run into issues, need help, or have suggestions:
-
-- 💬 **Ask for help or report bugs** by opening an [issue](https://github.com/osrf/vrx/issues). Please include as much detail as possible, including:
-  - Steps to reproduce the issue
-  - Your system setup (OS, ROS version, etc.)
-  - Relevant error messages or logs
-
-- 🛠️ **Found a fix or improvement?** We welcome contributions! Submit a [pull request](https://github.com/osrf/vrx/pulls) with your proposed changes.
-
-- 📫 **Please do not email the maintainers with technical questions.** Using GitHub issues helps ensure that questions and solutions are visible and searchable for the whole community.
-
-Your feedback and participation help make VRX better for everyone — thank you for contributing!
-
-## Contributors
-
-We continue to receive important improvements from the community.  We have done our best to document this on our [Contributors Wiki](https://github.com/osrf/vrx/wiki/Contributors).
-
