@@ -1,0 +1,5 @@
+models:
+- model_name: wamv
+  model_type: wam-v
+  pose: [-532, 162, 0, 0, 0, 1]
+  locked: false
