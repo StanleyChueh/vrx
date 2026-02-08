@@ -14,7 +14,7 @@ Please follow the official instruction for detail:
 
 https://github.com/osrf/vrx/wiki/tutorials
 
-## Basic example
+# Basic example
 
 This part assume you have built vrx in your workspace
 
@@ -24,12 +24,18 @@ This part assume you have built vrx in your workspace
 cd ~/vrx_ws/
 source /opt/ros/jazzy/setup.bash
 source install/setup.bash
-ros2 launch vrx_gz competition.launch.py world:=sydney_regatta
+ros2 launch vrx_gz competition.launch.py world:=ocean sim_mode:=full
 ```
 
 you will see something like this:
 
 <img width="1585" height="857" alt="image" src="https://github.com/user-attachments/assets/95c7fea1-e06b-4f6c-87e8-17640587dc02" />
+
+### RVIZ Visualizarion
+
+```
+ros2 launch vrx_gazebo rviz.launch.py
+```
 
 ### Keyboard control
 
@@ -73,6 +79,89 @@ Please locate this section
 </plugin>
 ```
 
+### Wind speed
+
+Please locate ~/vrx_ws/src/vrx/vrx_gz/worlds/sydney_regatta.sdf
+
+Please locate this section
+
+```
+    <!-- The wave field -->
+    <plugin filename="libPublisherPlugin.so" name="vrx::PublisherPlugin">
+      <message type="gz.msgs.Param" topic="/vrx/wavefield/parameters"
+               every="2.0">
+        params {
+          key: "direction"
+          value {
+            type: DOUBLE
+            double_value: 0.0
+          }
+        }
+        params {
+          key: "gain"
+          value {
+            type: DOUBLE
+            double_value: 0.3
+          }
+        }
+        params {
+          key: "period"
+          value {
+            type: DOUBLE
+            double_value: 5
+          }
+        }
+        params {
+          key: "steepness"
+          value {
+            type: DOUBLE
+            double_value: 0
+          }
+        }
+      </message>
+    </plugin>
+```
+
+##  ASV_WAVE_SIM
+
+For more realistic wave,ocean view, please refer to asv_wave_sim
+
+https://github.com/srmainwaring/asv_wave_sim.git
+
+<img width="1835" height="884" alt="image" src="https://github.com/user-attachments/assets/c82a63f5-998d-48d2-95f6-dbc0b7a48a4a" />
+
+Kill all servers first
+
+```
+killall -9 gz-sim-server gz-sim-gui ruby
+```
+
+Server
+
+```
+source ~/gz_ws/install/setup.bash
+export GZ_SIM_RESOURCE_PATH=~/gz_ws/src/asv_wave_sim/gz-waves-models/models:~/gz_ws/src/asv_wave_sim/gz-waves-models/world_models
+export GZ_SIM_SYSTEM_PLUGIN_PATH=~/gz_ws/install/lib
+# Note: Server doesn't usually need the NVIDIA offload, but it needs the plugin paths.
+gz sim -v4 -s -r ~/gz_ws/src/asv_wave_sim/gz-waves-models/worlds/waves.sdf
+```
+
+
+Client
+
+```
+source ~/gz_ws/install/setup.bash
+
+# Tell Gazebo where your compiled waves plugins are
+export GZ_SIM_SYSTEM_PLUGIN_PATH=$GZ_SIM_SYSTEM_PLUGIN_PATH:~/gz_ws/install/lib
+
+# Keep your existing library and rendering exports
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/ros/jazzy/opt/gz_ogre_next_vendor/lib:/opt/ros/jazzy/opt/gz_rendering_vendor/lib
+export GZ_RENDERING_BACKEND=ogre2
+
+# Launch with NVIDIA offload
+__NV_PRIME_RENDER_OFFLOAD=1 __GLX_VENDOR_LIBRARY_NAME=nvidia gz sim -v4 -g
+```
 
 ## Reference
 
