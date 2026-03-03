@@ -1,11 +1,7 @@
-- model_name: boat_1
-  model_type: roboboat02
-  position: [-532, 162, 0]
+- model_name: wamv
+  model_type: wamv
+  position: [-532.0, 162.0, 0.0]
 
-- model_name: boat_2
-  model_type: roboboat02
-  position: [-528, 162, 0]
-
-- model_name: boat_3
-  model_type: roboboat02
-  position: [-524, 162, 0]
+- model_name: wamv_follower
+  model_type: wamv
+  position: [-540.0, 162.0, 0.0]
