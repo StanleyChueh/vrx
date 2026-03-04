@@ -18,5 +18,5 @@
 - model_name: wamv2
   model_type: wam-v
   position:
-    xyz: [-532, 152, 0]
+    xyz: [-522, 162, 0]
     rpy: [0, 0, 1]

@@ -29,6 +29,7 @@ from launch_ros.actions import Node
 from launch_ros.actions import PushRosNamespace
 
 import vrx_gz.bridges
+import vrx_gz.payload_bridges
 
 import os
 
@@ -210,6 +211,38 @@ FOLLOWPATH_WORLDS = [
   'follow_path4',
   'follow_path5'
 ]
+
+def unity_boat_bridges(world_name):
+    model_name = 'unity_boat'
+    link_name = 'link'
+    bridges = [
+        vrx_gz.bridges.pose(model_name),
+        vrx_gz.bridges.pose_static(model_name),
+        vrx_gz.bridges.joint_states(world_name, model_name),
+        vrx_gz.payload_bridges.imu(world_name, model_name, link_name, 'imu_wamv_sensor'),
+        vrx_gz.payload_bridges.navsat(world_name, model_name, link_name, 'gps_wamv_sensor'),
+        vrx_gz.payload_bridges.image(world_name, model_name, link_name, 'front_left_camera_sensor'),
+        vrx_gz.payload_bridges.camera_info(world_name, model_name, link_name, 'front_left_camera_sensor'),
+        vrx_gz.payload_bridges.image(world_name, model_name, link_name, 'front_right_camera_sensor'),
+        vrx_gz.payload_bridges.camera_info(world_name, model_name, link_name, 'front_right_camera_sensor'),
+        vrx_gz.payload_bridges.image(world_name, model_name, link_name, 'middle_right_camera_sensor'),
+        vrx_gz.payload_bridges.camera_info(world_name, model_name, link_name, 'middle_right_camera_sensor'),
+        vrx_gz.payload_bridges.lidar_scan(world_name, model_name, link_name, 'lidar_wamv_sensor'),
+        vrx_gz.payload_bridges.lidar_points(world_name, model_name, link_name, 'lidar_wamv_sensor'),
+    ]
+    nodes = [Node(
+        package='ros_gz_bridge',
+        executable='parameter_bridge',
+        output='screen',
+        arguments=[bridge.argument() for bridge in bridges],
+        remappings=[bridge.remapping() for bridge in bridges],
+    )]
+    group_action = GroupAction([
+        PushRosNamespace(model_name),
+        *nodes
+    ])
+    return [group_action]
+
 
 def simulation(world_name, headless=False, paused=False, extra_gz_args=''):
     gz_args = ['-v 4']

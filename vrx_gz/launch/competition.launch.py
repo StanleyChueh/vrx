@@ -59,6 +59,9 @@ def launch(context, *args, **kwargs):
     if (sim_mode == 'bridge' or sim_mode == 'full') and bridge_competition_topics:
         launch_processes.extend(vrx_gz.launch.competition_bridges(world_name_base, competition_mode))
 
+    if world_name_base == 'ocean' and (sim_mode == 'bridge' or sim_mode == 'full'):
+        launch_processes.extend(vrx_gz.launch.unity_boat_bridges(world_name_base))
+
     return launch_processes
 
 

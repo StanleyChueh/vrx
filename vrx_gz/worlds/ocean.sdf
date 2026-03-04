@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 
 <sdf version="1.9">
-  <world name="sydney_regatta">
+  <world name="ocean">
 
     <physics name="4ms" type="dart">
       <max_step_size>0.004</max_step_size>
@@ -650,6 +650,12 @@
       <name>drone_1</name>
       <pose>-520 160 5 0 0 0</pose>
       <uri>model://x3_uav</uri>
+    </include>
+
+    <include>
+      <name>unity_boat</name>
+      <pose>-510 165 2.0 0 0 0</pose>
+      <uri>model://unity_boat</uri>
     </include>
 
   </world>

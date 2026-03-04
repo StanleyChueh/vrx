@@ -1,0 +1,154 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <model name="unity_boat">
+    <pose>0 0 0 0 0 0</pose>
+    <static>false</static>
+
+    <link name="link">
+
+      <visual name="visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>model://unity_boat/meshes/boat.dae</uri>
+          </mesh>
+        </geometry>
+      </visual>
+
+      <collision name="collision">
+        <pose>0 0 0.075 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>7.0 17.0 4.62</size>
+          </box>
+        </geometry>
+      </collision>
+
+      <inertial>
+        <pose>0 0 -0.8 0 0 0</pose>
+        <mass>700</mass>
+        <inertia>
+          <ixx>18103</ixx>
+          <iyy>4103</iyy>
+          <izz>19717</izz>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyz>0</iyz>
+        </inertia>
+      </inertial>
+
+      <!-- IMU -->
+      <sensor name="imu_wamv_sensor" type="imu">
+        <pose>0 0 0.2 0 0 0</pose>
+        <always_on>1</always_on>
+        <update_rate>50</update_rate>
+        <imu>
+          <angular_velocity>
+            <x><noise type="gaussian"><mean>0</mean><stddev>2e-4</stddev></noise></x>
+            <y><noise type="gaussian"><mean>0</mean><stddev>2e-4</stddev></noise></y>
+            <z><noise type="gaussian"><mean>0</mean><stddev>2e-4</stddev></noise></z>
+          </angular_velocity>
+          <linear_acceleration>
+            <x><noise type="gaussian"><mean>0</mean><stddev>1.7e-2</stddev></noise></x>
+            <y><noise type="gaussian"><mean>0</mean><stddev>1.7e-2</stddev></noise></y>
+            <z><noise type="gaussian"><mean>0</mean><stddev>1.7e-2</stddev></noise></z>
+          </linear_acceleration>
+        </imu>
+      </sensor>
+
+      <!-- GPS -->
+      <sensor name="gps_wamv_sensor" type="navsat">
+        <pose>0 0 1.0 0 0 0</pose>
+        <always_on>1</always_on>
+        <update_rate>10</update_rate>
+        <navsat>
+          <position_sensing>
+            <horizontal><noise type="gaussian"><mean>0</mean><stddev>0.5</stddev></noise></horizontal>
+            <vertical><noise type="gaussian"><mean>0</mean><stddev>0.5</stddev></noise></vertical>
+          </position_sensing>
+        </navsat>
+      </sensor>
+
+      <!-- Front left camera -->
+      <sensor name="front_left_camera_sensor" type="camera">
+        <pose>2.0 0.5 1.5 0 0 0</pose>
+        <always_on>1</always_on>
+        <update_rate>30</update_rate>
+        <camera>
+          <horizontal_fov>1.3962634</horizontal_fov>
+          <image><width>640</width><height>480</height><format>R8G8B8</format></image>
+          <clip><near>0.1</near><far>300</far></clip>
+        </camera>
+      </sensor>
+
+      <!-- Front right camera -->
+      <sensor name="front_right_camera_sensor" type="camera">
+        <pose>2.0 -0.5 1.5 0 0 0</pose>
+        <always_on>1</always_on>
+        <update_rate>30</update_rate>
+        <camera>
+          <horizontal_fov>1.3962634</horizontal_fov>
+          <image><width>640</width><height>480</height><format>R8G8B8</format></image>
+          <clip><near>0.1</near><far>300</far></clip>
+        </camera>
+      </sensor>
+
+      <!-- Middle right camera -->
+      <sensor name="middle_right_camera_sensor" type="camera">
+        <pose>0.5 -1.0 1.5 0 0 -0.3</pose>
+        <always_on>1</always_on>
+        <update_rate>30</update_rate>
+        <camera>
+          <horizontal_fov>1.3962634</horizontal_fov>
+          <image><width>640</width><height>480</height><format>R8G8B8</format></image>
+          <clip><near>0.1</near><far>300</far></clip>
+        </camera>
+      </sensor>
+
+      <!-- Lidar -->
+      <sensor name="lidar_wamv_sensor" type="gpu_lidar">
+        <pose>0 0 2.5 0 0 0</pose>
+        <always_on>1</always_on>
+        <update_rate>10</update_rate>
+        <lidar>
+          <scan>
+            <horizontal>
+              <samples>640</samples>
+              <resolution>1</resolution>
+              <min_angle>-3.14159</min_angle>
+              <max_angle>3.14159</max_angle>
+            </horizontal>
+            <vertical>
+              <samples>1</samples><resolution>1</resolution>
+              <min_angle>0</min_angle><max_angle>0</max_angle>
+            </vertical>
+          </scan>
+          <range><min>0.5</min><max>100</max><resolution>0.01</resolution></range>
+          <noise><type>gaussian</type><mean>0</mean><stddev>0.01</stddev></noise>
+        </lidar>
+      </sensor>
+
+    </link>
+
+    <plugin name="vrx::PolyhedraBuoyancyDrag"
+            filename="libPolyhedraBuoyancyDrag.so">
+      <fluid_density>1000</fluid_density>
+      <fluid_level>0.0</fluid_level>
+      <linear_drag>50.0</linear_drag>
+      <angular_drag>5.0</angular_drag>
+      <buoyancy name="hull">
+        <link_name>link</link_name>
+        <pose>0 0 -1.5 0 0 0</pose>
+        <geometry>
+          <box>
+            <size>2.5 6.0 0.8</size>
+          </box>
+        </geometry>
+      </buoyancy>
+      <wavefield>
+        <topic>/vrx/wavefield/parameters</topic>
+      </wavefield>
+    </plugin>
+
+  </model>
+</sdf>
