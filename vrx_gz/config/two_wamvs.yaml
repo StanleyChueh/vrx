@@ -1,0 +1,22 @@
+# Two WAM-V boats configuration
+# Boat 1: wamv  (original position)
+# Boat 2: wamv2 (spawned 10 m to the side)
+#
+# Launch with:
+#   ros2 launch vrx_gz competition.launch.py world:=sydney_regatta \
+#     config_file:=$(ros2 pkg prefix vrx_gz --share)/config/two_wamvs.yaml
+#
+# Topics for boat 1:  /wamv/thrusters/left/thrust  etc.
+# Topics for boat 2:  /wamv2/thrusters/left/thrust etc.
+
+- model_name: wamv
+  model_type: wam-v
+  position:
+    xyz: [-532, 162, 0]
+    rpy: [0, 0, 1]
+
+- model_name: wamv2
+  model_type: wam-v
+  position:
+    xyz: [-532, 152, 0]
+    rpy: [0, 0, 1]
