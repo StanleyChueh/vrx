@@ -33,7 +33,7 @@ Multi-boat import
 cd ~/vrx_ws/
 source /opt/ros/jazzy/setup.bash
 source install/setup.bash
-ros2 launch vrx_gz competition.launch.py   world:=sydney_regatta   config_file:=$(ros2 pkg prefix vrx_gz --share)/config/two_wamvs.yaml
+ros2 launch vrx_gz competition.launch.py   world:=ocean   config_file:=$(ros2 pkg prefix vrx_gz --share)/config/two_wamvs.yaml
 ```
 
 you will see something like this:
